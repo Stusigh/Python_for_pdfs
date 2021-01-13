@@ -1,0 +1,28 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Jul 27 12:25:01 2020
+
+@author: stuar
+"""
+
+
+from PyPDF2 import PdfFileReader, PdfFileWriter
+
+def merge_pdfs(paths, output):
+    pdf_writer = PdfFileWriter()
+
+    for path in paths:
+        pdf_reader = PdfFileReader(path)
+        for page in range(pdf_reader.getNumPages()):
+            # Add each page to the writer object
+            new_page = pdf_reader.getPage(page)
+            new_page.scaleTo(210,297)
+            pdf_writer.addPage(new_page)
+
+    # Write out the merged PDF
+    with open(output, 'wb') as out:
+        pdf_writer.write(out)
+
+if __name__ == '__main__':
+    paths = ['1.pdf', '2.pdf']
+    merge_pdfs(paths, output='merged.pdf')
